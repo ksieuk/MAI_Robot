@@ -1,0 +1,19 @@
+actor User
+participant Order
+participant BotControl
+participant Robot
+participant Camera
+User->Order: Create order
+Order->BotControl: Start
+BotControl->Camera: getRobotPosition
+BotControl->Camera: getUserPosition
+BotControl->BotControl: newRoute
+BotControl->Robot: setCoordinate
+BotControl->Robot: Move
+BotControl->Order: Update status
+BotControl->Camera: getRobotPosition
+BotControl->BotControl: newRoute
+BotControl->Robot: setCoordinate
+BotControl->Robot: Move
+BotControl->Order: Update status
+@enduml
