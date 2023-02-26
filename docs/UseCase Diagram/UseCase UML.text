@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+actor "Студент" as student
+actor "Сервер" as server
+
+rectangle Робот {
+  usecase "Запросить напиток" as UC1
+  usecase "Определить местонахождение робота" as UC2
+  usecase "Определить местонахождение человека" as UC3
+  usecase "Построить маршрут" as UC4
+  usecase "Принять изображение с камеры" as UC5
+  usecase "Управлять движением робота" as UC6
+  usecase "Отправить местоположение" as UC7
+}
+student --> UC1
+student --> UC7
+server --> UC2
+server --> UC3
+server --> UC4
+server --> UC5
+server --> UC6
+@enduml
