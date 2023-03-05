@@ -1,0 +1,44 @@
+@startuml
+class Robot_control{
+robot: Robot;
+void moveForward();
+void moveLeft();
+void moveRight();
+void moveBack();
+void stop();
+}
+
+class Robot{
+posX: int;
+posY: int;
+status: int;
+}
+
+class Camera{
+void get_image();
+void update_image();
+}
+
+class Order{
+puf: int;
+order: int;
+status: int;
+}
+
+class User{
+void makeOrder();
+}
+
+class Server{
+void findRobot();
+void findPuf();
+void startRouting();
+void calcDestination();
+}
+
+Robot ...> Robot_control
+Server <-- Camera
+Server <-- Order
+Robot_control --> Server
+Order <-- User
+@enduml
