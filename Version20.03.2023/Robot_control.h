@@ -11,9 +11,7 @@ private:
 	Position *pos;
 	int status;
 public:
-	Robot_control(Camera* cam, Robot* bot) {
-		this->status = 0;
-	};
+	Robot_control(Camera* cam, Robot* bot);
 	void start();
 	void piloting();
 };
