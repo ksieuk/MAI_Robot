@@ -7,12 +7,6 @@
 using namespace std;
 using namespace cv;
 
-Robot_control::Robot_control(Camera* cam, Robot* bot) {
-	this->status = 0;
-	this->robot = bot;
-	this->cam = cam;
-}
-
 Camera::Camera(int i) {
     cap.open(i); //capture the video from web cam
 
