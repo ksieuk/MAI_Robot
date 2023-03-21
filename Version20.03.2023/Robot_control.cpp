@@ -3,7 +3,11 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 
-
+Robot_control::Robot_control(Camera* cam, Robot* bot) {
+	this->status = 0;
+	this->robot = bot;
+	this->cam = cam;
+}
 
 void Robot_control::start() {
 	for (;;) {
