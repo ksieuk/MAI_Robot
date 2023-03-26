@@ -3,75 +3,92 @@
 #include "opencv2/opencv.hpp"
 #include <cstdlib>
 #include <math.h>
+#include <vector>
 
 using namespace std;
 using namespace cv;
 
 Camera::Camera(int i) {
-    cap.open(i); //capture the video from web cam
+    this->cap.open(i); //capture the video from web cam
 
-    if (!cap.isOpened())  // if not success, exit program
+    if (!this->cap.isOpened())
     {
         cout << "Cannot open the web cam" << endl;
     }
 }
 
 Mat Camera::getImage() {
-	cout << "Get Image";
+	//cout << "Get Image";
+
 	cap >> frame;
 	return frame;
 }
 	
 
 void Camera::updateImage() {
-	cout << "Update Image";
+	//cout << "Update Image";
 
 	frameResult = getImage();
 
 	frameResult = findRobot(frameResult);
 
 	//frameResult = findTarget(frameResult);
-
+	//frontP = calcRectMiddle(front);
+	//backP = calcRectMiddle(back);
+	//middleP = calcRobotMiddle(frontP, backP);
+	//cout << middleP;
 }
 
 
 Mat Camera::findRobot(Mat frameR) {
-	int min = 10000;
-
+	vector <Rect> buf;
+	int min = 40;
 	//fint the front of robot
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(frameR, Scalar(0, 0, 0), Scalar(255, 100, 50), imgThresholded);
+	cv::inRange(frameR, Scalar(150, 120, 120), Scalar(172, 255, 255), imgThresholded);
 	for (int y = 0; y < imgThresholded.rows; y++) {
 		for (int x = 0; x < imgThresholded.cols; x++) {
 			int value = imgThresholded.at<uchar>(y, x);
 			if (value == 255) {
 				Rect rectF;
 				int count = floodFill(imgThresholded, Point(x, y), Scalar(200), &rectF);
-				if (rectF.width >= min &&  rectF.height >= min) {
+				//buf.push_back(rectF);
+				if (rectF.width >= min && rectF.height >= min) {
 					rectangle(frameR, rectF, Scalar(255, 0, 255, 4));
 				}
-				front = rectF;
+				//front = rectF;
 			}
 		}
 	}
 
-
+	imshow("Tresholded", imgThresholded);
+	/*Rect max;
+	for (auto it = buf.begin(); it != buf.end(); it++) {
+		if (*it.heght > max) {
+		
+		}
+	}*/
+	
+	//buf.clear();
 
 	//find the back of robot
-	cv::inRange(frameR, Scalar(82, 30, 25), Scalar(146, 100, 100), imgThresholded2);
+	cv::inRange(frameR, Scalar(68, 120, 120), Scalar(122, 255, 255), imgThresholded2);
 	for (int y = 0; y < imgThresholded2.rows; y++) {
 		for (int x = 0; x < imgThresholded2.cols; x++) {
 			int value = imgThresholded2.at<uchar>(y, x);
 			if (value == 255) {
 				Rect rectB;
+				buf.push_back(rectB);
 				int count = floodFill(imgThresholded2, Point(x, y), Scalar(200), &rectB);
 				if (rectB.width >= min && rectB.height >= min) {
 					rectangle(frameR, rectB, Scalar(125, 0, 200, 4));
 				}
-				back = rectB;
+				//back = rectB;
 			}
 		}
 	}
+	imshow("Tresholded2", imgThresholded2);
+	cv::imshow("main", frameR);
 	return frameR;
 }
 

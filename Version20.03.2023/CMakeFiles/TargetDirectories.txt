@@ -1,0 +1,3 @@
+/home/sergh/MAI/Architecture Program/DeliveryBotCode/CMakeFiles/main.dir
+/home/sergh/MAI/Architecture Program/DeliveryBotCode/CMakeFiles/edit_cache.dir
+/home/sergh/MAI/Architecture Program/DeliveryBotCode/CMakeFiles/rebuild_cache.dir

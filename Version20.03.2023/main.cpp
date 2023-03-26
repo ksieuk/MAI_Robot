@@ -13,6 +13,8 @@ using namespace cv;
 int main() {
 	Robot *robot = new Robot;
     Camera *cam = new Camera(0);
-    Robot_control *control = new Robot_control(cam, robot);
+    Robot_control* control = new Robot_control(cam, robot);
+    cam->updateImage();
     control->start();
+
 }
