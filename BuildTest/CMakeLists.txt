@@ -1,7 +1,0 @@
-cmake_minimum_required(VERSION 3.0)
-project( main )
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
-set(SOURCES main.cpp Camera.cpp Robot.cpp Robot_control.cpp Server.cpp User.cpp )
-add_executable( main ${SOURCES})
-target_link_libraries( main ${OpenCV_LIBS} )
