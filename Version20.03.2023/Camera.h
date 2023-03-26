@@ -21,6 +21,7 @@ private:
 
 	Point frontP;
 	Point backP;
+	Point middleP;
 
 	Mat getImage();
 	Mat findRobot(Mat frameR);

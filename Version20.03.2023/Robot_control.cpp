@@ -12,7 +12,7 @@ Robot_control::Robot_control(Camera* cam, Robot* bot) {
 void Robot_control::start() {
 	for (;;) {
 		this->cam->updateImage();
-		piloting();
+		//piloting();
 		if (cv::waitKey(33) == 27) break;
 	}
 }
