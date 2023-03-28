@@ -32,7 +32,7 @@ void Camera::updateImage() {
 
 	frameResult = findRobot(frameResult);
 
-	//frameResult = findTarget(frameResult);
+	frameResult = findTarget(frameResult);
 	frontP = calcRectMiddle(front);
 	backP = calcRectMiddle(back);
 	middleP = calcRobotMiddle(frontP, backP);

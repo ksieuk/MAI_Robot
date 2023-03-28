@@ -1,12 +1,14 @@
 #include "Robot_control.h"
 #include "Robot.h"
+#include "Order_control.h"
 #include "opencv2/opencv.hpp"
 #include <iostream>
 
-Robot_control::Robot_control(Camera* cam, Robot* bot) {
+Robot_control::Robot_control(Camera* cam, Robot* bot, Order_control* ord_control) {
 	this->status = 0;
 	this->robot = bot;
 	this->cam = cam;
+	this->ord_control = ord_control;
 }
 
 void Robot_control::start() {
@@ -21,7 +23,12 @@ void Robot_control::piloting() {
 	switch (this->status) {
 	case 0:
 		std::cout << "Robot waiting";
-		this->status = 1;
+		if (ord_control->ordersExists()){
+			this->status = 1;
+		}
+		else{
+			break;
+		}
 	case 1:
 		std:: cout << "Robot get order";
 		this->status = 2;
