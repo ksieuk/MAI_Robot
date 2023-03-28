@@ -137,6 +137,7 @@ Mat Camera::findTarget(Mat frameR) {
 	}
 	rectangle(frameR, max, Scalar(0, 0, 0, 4));
 
+	targetP = calcRectMiddle(max);
 	return frameR;
 }
 
@@ -165,4 +166,10 @@ int Camera::calcAngleToTarget(Point robot, Point target) {
 
 int calcDistanceToTarget(Point a, Point b) {
 	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+int getDistanceToTarget(){
+	int dist;
+	dist = calcDistanceToTarget(middleP; target);
+	return dist;
 }

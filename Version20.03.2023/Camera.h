@@ -22,6 +22,7 @@ private:
 	Point frontP;
 	Point backP;
 	Point middleP;
+	Point targetP;
 
 	Mat getImage();
 	Mat findRobot(Mat frameR);
@@ -33,5 +34,7 @@ private:
 public:
     Camera(int i);
 	void updateImage();
+	int getDistanceToTarget();
+	int getAngle();
 	~Camera();
 };
