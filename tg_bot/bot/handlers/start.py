@@ -9,8 +9,8 @@ from aiogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton,
 )
 
-from tg_bot.bot.structures.fsm_groups import DeliveryStates
-from tg_bot.bot.structures.keyboards.delivery import (
+from bot.structures.fsm_groups import DeliveryStates
+from bot.structures.keyboards.delivery import (
     get_kb_new_order, get_kb_drinks, get_kb_locations, get_kb_confirmation,
 )
 

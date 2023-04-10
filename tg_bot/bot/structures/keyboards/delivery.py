@@ -1,6 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup
 
-from tg_bot.bot.structures.keyboards.base_buttons import create_kb_basic
+from bot.structures.keyboards.base_buttons import create_kb_basic
 
 
 def get_kb_new_order() -> ReplyKeyboardMarkup:

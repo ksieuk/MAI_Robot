@@ -1,7 +1,7 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from handlers import start
-from tg_bot.bot.config import bot_settings
+from bot.handlers import start
+from bot.config import bot_settings
 
 
 
