@@ -12,6 +12,7 @@ private:
 	Mat imgThresholded;
 	Mat imgHSV;
 	Mat imgThresholded2;
+	Mat imgThresholded3;
 
 	VideoCapture cap;
 

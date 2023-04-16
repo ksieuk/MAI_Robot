@@ -6,11 +6,10 @@
 #include <pthread.h>
 #include <mosquitto.h>
 #include <string.h>
-#include <json-c/json.h>
 #define NUM_MESSAGES 30
 #define THREAD 10
 #define KEEP_ALIVE 60
-#define MQTT_PUB_TOPIC "test"
+#define MQTT_PUB_TOPIC "testSergh"
 #define MQTT_QOS_LEVEL 2
 #define MSG_MAX_SIZE 512
 
@@ -28,17 +27,13 @@ void Robot::sendtoserver (const char* data) {
 
 void Robot::moveForward() {
 	std::cout << "Forward";
-    sendtoserver("hello");
+    sendtoserver("{ \"cmd\":\"forward\", \"val\": 0.1, \"spd\": 0.3}");
 }
 
-void Robot::setAngle() {
-	std::cout << "Angle";
+void Robot::turnLeft() {
+    sendtoserver("{ \"cmd\":\"left\", \"val\": 0.1, \"spd\": 0.3}");
 }
 
-void Robot::moveBack() {
-	std::cout << "Back";
-}
-
-void Robot::stop() {
-	std::cout << "Stopped";
+void Robot::turnRight() {
+    sendtoserver("{ \"cmd\":\"right\", \"val\": 0.1, \"spd\": 0.3}");
 }
