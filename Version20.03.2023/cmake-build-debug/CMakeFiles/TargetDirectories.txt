@@ -1,3 +1,0 @@
-C:/MAI/2 kurs/Apps Architecture/DeliveryBot/cmake-build-debug/CMakeFiles/main.dir
-C:/MAI/2 kurs/Apps Architecture/DeliveryBot/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/MAI/2 kurs/Apps Architecture/DeliveryBot/cmake-build-debug/CMakeFiles/rebuild_cache.dir

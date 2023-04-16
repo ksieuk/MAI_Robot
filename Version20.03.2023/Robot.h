@@ -3,8 +3,13 @@
 class Robot {
 public:
 	void moveForward();
-	void setAngle();
-	void moveBack();
-	void stop();
-};
+	void turnLeft();
+	void turnRight();
 
+	char* server = nullptr;
+    int port;
+
+    void sendtoserver(const char* data);
+
+	Robot(char *s, int p);
+};

@@ -32,70 +32,110 @@ void Camera::updateImage() {
 
 	frameResult = findRobot(frameResult);
 
-	//frameResult = findTarget(frameResult);
-	//frontP = calcRectMiddle(front);
-	//backP = calcRectMiddle(back);
-	//middleP = calcRobotMiddle(frontP, backP);
+	frameResult = findTarget(frameResult);
+	frontP = calcRectMiddle(front);
+	backP = calcRectMiddle(back);
+	middleP = calcRobotMiddle(frontP, backP);
 	//cout << middleP;
 }
 
 
 Mat Camera::findRobot(Mat frameR) {
+
 	vector <Rect> buf;
+
 	int min = 40;
+
 	//fint the front of robot
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(frameR, Scalar(150, 120, 120), Scalar(172, 255, 255), imgThresholded);
+	cv::inRange(imgHSV, Scalar(150, 120, 120), Scalar(172, 255, 255), imgThresholded);
 	for (int y = 0; y < imgThresholded.rows; y++) {
 		for (int x = 0; x < imgThresholded.cols; x++) {
 			int value = imgThresholded.at<uchar>(y, x);
 			if (value == 255) {
 				Rect rectF;
 				int count = floodFill(imgThresholded, Point(x, y), Scalar(200), &rectF);
-				//buf.push_back(rectF);
 				if (rectF.width >= min && rectF.height >= min) {
-					rectangle(frameR, rectF, Scalar(255, 0, 255, 4));
+					buf.push_back(rectF);
 				}
-				//front = rectF;
 			}
 		}
 	}
 
 	imshow("Tresholded", imgThresholded);
-	/*Rect max;
-	for (auto it = buf.begin(); it != buf.end(); it++) {
-		if (*it.heght > max) {
-		
+
+	Rect max;
+	for (int i = 0; i < buf.size(); i++) {
+		if (buf[i].height * buf[i].width > max.height * max.width) {
+			max = buf[i];
 		}
-	}*/
-	
-	//buf.clear();
+	}
+	rectangle(frameR, max, Scalar(255, 0, 255, 4));
+	front = max;
+
+	buf.clear();
 
 	//find the back of robot
-	cv::inRange(frameR, Scalar(68, 120, 120), Scalar(122, 255, 255), imgThresholded2);
+	cv::inRange(imgHSV, Scalar(68, 120, 120), Scalar(122, 255, 255), imgThresholded2);
 	for (int y = 0; y < imgThresholded2.rows; y++) {
 		for (int x = 0; x < imgThresholded2.cols; x++) {
 			int value = imgThresholded2.at<uchar>(y, x);
 			if (value == 255) {
 				Rect rectB;
-				buf.push_back(rectB);
 				int count = floodFill(imgThresholded2, Point(x, y), Scalar(200), &rectB);
 				if (rectB.width >= min && rectB.height >= min) {
-					rectangle(frameR, rectB, Scalar(125, 0, 200, 4));
+					buf.push_back(rectB);
 				}
-				//back = rectB;
 			}
 		}
 	}
-	imshow("Tresholded2", imgThresholded2);
+
+	for (int i = 0; i < buf.size(); i++) {
+		if (buf[i].height * buf[i].width > max.height * max.width) {
+			max = buf[i];
+		}
+	}
+	rectangle(frameR, max, Scalar(125, 0, 200, 4));
+	back = max;
+
+	buf.clear();
+
 	cv::imshow("main", frameR);
 	return frameR;
 }
 
-Mat findTarget(Mat frameR) {
-	cout << "Target found";
-	cv::Mat frameRs = frameR;
-	return frameRs;
+Mat Camera::findTarget(Mat frameR) {
+	vector <Rect> buf;
+
+	int min = 40;
+	//find the target
+	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
+	cv::inRange(imgHSV, Scalar(0, 0, 178), Scalar(255, 255, 255), imgThresholded3);
+	for (int y = 0; y < imgThresholded3.rows; y++) {
+		for (int x = 0; x < imgThresholded3.cols; x++) {
+			int value = imgThresholded3.at<uchar>(y, x);
+			if (value == 255) {
+				Rect rect;
+				int count = floodFill(imgThresholded3, Point(x, y), Scalar(200), &rect);
+				if (rect.width >= min && rect.height >= min) {
+					buf.push_back(rect);
+				}
+			}
+		}
+	}
+
+	imshow("Tresholded3", imgThresholded3);
+	imshow("hsv", imgHSV);
+
+	Rect max;
+	for (int i = 0; i < buf.size(); i++) {
+		if (buf[i].height * buf[i].width > max.height * max.width) {
+			max = buf[i];
+		}
+	}
+	rectangle(frameR, max, Scalar(150, 0, 125, 4));
+	targetP = calcRectMiddle(max);
+	return frameR;
 }
 
 Point Camera::calcRectMiddle(Rect rect){
@@ -121,6 +161,18 @@ int Camera::calcAngleToTarget(Point robot, Point target) {
 		return 360 + angle;
 }
 
-int calcDistanceToTarget(Point a, Point b) {
+int Camera::calcDistanceToTarget(Point a, Point b) {
 	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
+int Camera::getDistanceToTarget(){
+	int dist;
+	dist = calcDistanceToTarget(middleP, targetP);
+	return dist;
+}
+
+int Camera::getAngle(){
+	int angle;
+	angle = calcAngleToTarget(middleP, targetP);
+	return angle;
 }

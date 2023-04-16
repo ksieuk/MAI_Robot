@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 project( main )
 find_package( OpenCV REQUIRED )
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(Mosquitto REQUIRED IMPORTED_TARGET libmosquitto)
+
 include_directories( ${OpenCV_INCLUDE_DIRS} )
-set(SOURCES main.cpp Camera.cpp Robot.cpp Robot_control.cpp User.cpp)
+set(SOURCES main.cpp Camera.cpp Robot.cpp Robot_control.cpp User.cpp Order_control.cpp)
 add_executable( main ${SOURCES})
-target_link_libraries( main ${OpenCV_LIBS} )
+target_link_libraries( main ${OpenCV_LIBS} PkgConfig::Mosquitto)
