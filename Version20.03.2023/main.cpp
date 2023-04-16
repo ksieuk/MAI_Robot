@@ -11,8 +11,11 @@
 using namespace std;
 using namespace cv;
 
+#define mqtt_host "broker.hivemq.com"
+#define mqtt_port 1883
+
 int main() {
-	Robot *robot = new Robot;
+	Robot *robot = new Robot(mqtt_host, mqtt_port);
     Camera *cam = new Camera(0);
     Order_control *ord_control = new Order_control; 
     Robot_control *control = new Robot_control(cam, robot, ord_control);

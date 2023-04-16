@@ -20,6 +20,7 @@ void Robot_control::start() {
 }
 
 void Robot_control::piloting() {
+	robot->moveForward();
 	switch (this->status) {
 	case 0:
 		std::cout << "Robot waiting";
@@ -30,16 +31,18 @@ void Robot_control::piloting() {
 			break;
 		}
 	case 1:
-		std:: cout << "Robot get order";
+		//std:: cout << "Robot get order";
 		this->status = 2;
 	case 2:
-		std::cout << "Robot moving";
+		//std::cout << "Robot moving: ";
+		//std::cout << cam->getDistanceToTarget();
 		this->status = 3;
 	case 3:
-		std::cout << "Robot rotating";
+		//std::cout << "Robot rotating: ";
+		//std::cout << cam->getAngle();
 		this->status = 4;
 	case 4:
-		std::cout << "Robot finished";
+		//std::cout << "Robot finished";
 		this->status = 0;
 	}
 }

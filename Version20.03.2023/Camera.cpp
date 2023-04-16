@@ -36,7 +36,7 @@ void Camera::updateImage() {
 	frontP = calcRectMiddle(front);
 	backP = calcRectMiddle(back);
 	middleP = calcRobotMiddle(frontP, backP);
-	cout << middleP;
+	//cout << middleP;
 }
 
 
@@ -106,7 +106,6 @@ Mat Camera::findRobot(Mat frameR) {
 }
 
 Mat Camera::findTarget(Mat frameR) {
-	cout << "Target found";
 	vector <Rect> buf;
 
 	int min = 40;
@@ -164,12 +163,18 @@ int Camera::calcAngleToTarget(Point robot, Point target) {
 		return 360 + angle;
 }
 
-int calcDistanceToTarget(Point a, Point b) {
+int Camera::calcDistanceToTarget(Point a, Point b) {
 	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
 
-int getDistanceToTarget(){
+int Camera::getDistanceToTarget(){
 	int dist;
-	dist = calcDistanceToTarget(middleP; target);
+	dist = calcDistanceToTarget(middleP, targetP);
 	return dist;
+}
+
+int Camera::getAngle(){
+	int angle;
+	angle = calcAngleToTarget(middleP, targetP);
+	return angle;
 }
