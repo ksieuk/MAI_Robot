@@ -9,4 +9,6 @@ Delivery robot development
 
 `docker exec -it mai_robot_robot_1 /bin/bash`
 
+`cd home/sergh`
+
 `./main`
