@@ -40,14 +40,17 @@ RUN cd \
     && cd ../.. \
     && rm 3.2.0.zip
 
-RUN mkdir /workspace
-WORKDIR /workspace
+#RUN mkdir /workspace
+#WORKDIR /workspace
 
 ENV LC_ALL C.UTF - 8
 ENV LANG C.UTF - 8
 ENV LANGUAGE C.UTF - 8
 
+COPY ./entrypoint.sh .
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
 
 ENTRYPOINT ["/bin/bash", "-l"]
-
-
