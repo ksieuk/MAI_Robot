@@ -23,8 +23,7 @@ void Robot_control::piloting() {
 	robot->moveForward();
 	switch (this->status) {
 	case 0:
-		/*std::cout << "Robot waiting";
-		*/
+		//Robot is waiting
 		if (ord_control->ordersExists()){
 			this->status = 1;
 		}
@@ -32,18 +31,32 @@ void Robot_control::piloting() {
 			break;
 		}
 	case 1:
-		//std:: cout << "Robot get order";
-		this->status = 2;
-	case 2:
-		//std::cout << "Robot moving: ";
-		std::cout << cam->getDistanceToTarget();
-		this->status = 3;
-	case 3:
-		//std::cout << "Robot rotating: ";
-		//std::cout << cam->getAngle();
-		this->status = 4;
-	case 4:
-		//std::cout << "Robot finished";
+		//Robot is moving
+		if (cam->getAngle > 0){
+			this->status = 2;
+		}
+		else {
+			this->status = 3;
+		}
+
+		if (cam->getDistanceToTarget > 200){
+			robot->moveForward;
+		}
+		else {
+			this->status = 4;
+		}
 		this->status = 0;
+	case 2:
+		//Robot is turnig left
+		robot->turnLeft;
+		break;
+
+	case 3:
+		//robot is turning right
+		robot->turnRight;
+		break;
+
+	case 4:
+		
 	}
 }

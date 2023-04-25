@@ -152,8 +152,16 @@ Point Camera::calcRobotMiddle(Point a, Point b) {
 	return Point(x, y);
 }
 
-int Camera::calcAngleToTarget(Point robot, Point target) {
-	double cos = (robot.x + robot.y) / (sqrt(robot.x * robot.x + robot.y * robot.y) * sqrt(target.x * target.x + target.y * target.y));
+int Camera::calcAngleToTarget(Point robotFront, Point robotMiddle, Point target) {
+	Point robotVector;
+	robotVector.x = robotFront.x - robotMiddle.x;
+	robotVector.y = robotFront.y - robotMiddle.y;
+
+	Point targetVector;
+	targetVector.x = targetVector.x - targetVector.x;
+	targetVector.y = targetVector.y - targetVector.y;
+
+	double cos = (robotVector.x * targetVector.x + robotVector.y + targetVector.y ) / (sqrt(robotVector.x * robotVector.x + robotVector.y * robotVector.y) * sqrt(targetVector.x * targetVector.x + targetVector.y * targetVector.y));
 	double angle = acos(cos) * 180 / 3.14;
 	if (angle >= 0)
 		return angle;
@@ -173,6 +181,6 @@ int Camera::getDistanceToTarget(){
 
 int Camera::getAngle(){
 	int angle;
-	angle = calcAngleToTarget(middleP, targetP);
+	angle = calcAngleToTarget(frontP, middleP, targetP);
 	return angle;
 }
