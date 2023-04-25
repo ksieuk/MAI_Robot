@@ -26,7 +26,6 @@ void Robot::sendtoserver (const char* data) {
 }
 
 void Robot::moveForward() {
-	std::cout << "Forward";
     sendtoserver("{ \"cmd\":\"forward\", \"val\": 0.1, \"spd\": 0.3}");
 }
 

@@ -30,7 +30,7 @@ private:
 	Mat findTarget(Mat frameR);
 	Point calcRectMiddle(Rect rect);
 	Point calcRobotMiddle(Point a, Point b);
-	int calcAngleToTarget(Point robot, Point target);
+	int calcAngleToTarget(Point robotFront, Point robotMiddle, Point target);
 	int calcDistanceToTarget(Point a, Point b);
 public:
     Camera(int i);

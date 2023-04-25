@@ -30,9 +30,10 @@ void Camera::updateImage() {
 
 	frameResult = getImage();
 
+	//frameResult = findTarget(frameResult);
+
 	frameResult = findRobot(frameResult);
 
-	frameResult = findTarget(frameResult);
 	frontP = calcRectMiddle(front);
 	backP = calcRectMiddle(back);
 	middleP = calcRobotMiddle(frontP, backP);
@@ -62,7 +63,7 @@ Mat Camera::findRobot(Mat frameR) {
 		}
 	}
 
-	imshow("Tresholded", imgThresholded);
+	//imshow("Pink", imgThresholded);
 
 	Rect max;
 	for (int i = 0; i < buf.size(); i++) {
@@ -90,6 +91,8 @@ Mat Camera::findRobot(Mat frameR) {
 		}
 	}
 
+	//imshow("Blue", imgThresholded2);
+
 	for (int i = 0; i < buf.size(); i++) {
 		if (buf[i].height * buf[i].width > max.height * max.width) {
 			max = buf[i];
@@ -100,17 +103,10 @@ Mat Camera::findRobot(Mat frameR) {
 
 	buf.clear();
 
-	cv::imshow("main", frameR);
-	return frameR;
-}
-
-Mat Camera::findTarget(Mat frameR) {
-	vector <Rect> buf;
-
 	int min = 40;
 	//find the target
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(imgHSV, Scalar(0, 0, 178), Scalar(255, 255, 255), imgThresholded3);
+	cv::inRange(imgHSV, Scalar(45, 115, 170), Scalar(60, 255, 255), imgThresholded3);
 	for (int y = 0; y < imgThresholded3.rows; y++) {
 		for (int x = 0; x < imgThresholded3.cols; x++) {
 			int value = imgThresholded3.at<uchar>(y, x);
@@ -124,8 +120,7 @@ Mat Camera::findTarget(Mat frameR) {
 		}
 	}
 
-	imshow("Tresholded3", imgThresholded3);
-	imshow("hsv", imgHSV);
+	imshow("Target", imgThresholded3);
 
 	Rect max;
 	for (int i = 0; i < buf.size(); i++) {
@@ -133,7 +128,44 @@ Mat Camera::findTarget(Mat frameR) {
 			max = buf[i];
 		}
 	}
-	rectangle(frameR, max, Scalar(150, 0, 125, 4));
+	rectangle(frameR, max, Scalar(125, 0, 200, 4));
+	targetP = calcRectMiddle(max);
+
+	buf.clear();
+
+	cv::imshow("main", frameR);
+	return frameR;
+}
+
+Mat Camera::findTarget(Mat frameR) {
+	vector <Rect> buf;
+
+	int min = 40;
+	//find the target
+	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
+	cv::inRange(imgHSV, Scalar(45, 115, 170), Scalar(60, 255, 255), imgThresholded3);
+	for (int y = 0; y < imgThresholded3.rows; y++) {
+		for (int x = 0; x < imgThresholded3.cols; x++) {
+			int value = imgThresholded3.at<uchar>(y, x);
+			if (value == 255) {
+				Rect rect;
+				int count = floodFill(imgThresholded3, Point(x, y), Scalar(200), &rect);
+				if (rect.width >= min && rect.height >= min) {
+					buf.push_back(rect);
+				}
+			}
+		}
+	}
+
+	imshow("Target", imgThresholded3);
+
+	Rect max;
+	for (int i = 0; i < buf.size(); i++) {
+		if (buf[i].height * buf[i].width > max.height * max.width) {
+			max = buf[i];
+		}
+	}
+	rectangle(frameR, max, Scalar(125, 0, 200, 4));
 	targetP = calcRectMiddle(max);
 	return frameR;
 }

@@ -32,15 +32,15 @@ void Robot_control::piloting() {
 		}
 	case 1:
 		//Robot is moving
-		if (cam->getAngle > 0){
+		if (cam->getAngle() > 0){
 			this->status = 2;
 		}
 		else {
 			this->status = 3;
 		}
 
-		if (cam->getDistanceToTarget > 200){
-			robot->moveForward;
+		if (cam->getDistanceToTarget() > 200){
+			robot->moveForward();
 		}
 		else {
 			this->status = 4;
@@ -48,15 +48,15 @@ void Robot_control::piloting() {
 		this->status = 0;
 	case 2:
 		//Robot is turnig left
-		robot->turnLeft;
+		robot->turnLeft();
 		break;
 
 	case 3:
 		//robot is turning right
-		robot->turnRight;
+		robot->turnRight();
 		break;
 
 	case 4:
-		
+		break;
 	}
 }
