@@ -46,17 +46,20 @@ void Robot_control::piloting() {
 			this->status = 4;
 		}
 		this->status = 0;
+
 	case 2:
 		//Robot is turnig left
 		robot->turnLeft();
 		break;
 
 	case 3:
-		//robot is turning right
+		//Robot is turning right
 		robot->turnRight();
 		break;
 
 	case 4:
+		//Delete the order
+		ord_control->deleteOrder();
 		break;
 	}
 }

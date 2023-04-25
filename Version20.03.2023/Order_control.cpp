@@ -9,6 +9,7 @@ void Order_control::addOrder(Order ord){
 }
 
 void Order_control::deleteOrder(Order curr){
+    orderList.erase(orderList.begin());
 }
 
 bool Order_control::ordersExists(){
