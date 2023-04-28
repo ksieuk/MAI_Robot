@@ -9,6 +9,6 @@ Delivery robot development
 
 `docker exec -it mai_robot_robot_1 /bin/bash`
 
-`cd home/sergh`
+`home/sergh/build/main`
 
-`./main`
+Для выхода используйте клавишу `Esc`

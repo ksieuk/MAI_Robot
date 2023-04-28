@@ -18,26 +18,19 @@ Camera::Camera(int i) {
 }
 
 Mat Camera::getImage() {
-	//cout << "Get Image";
-
 	cap >> frame;
 	return frame;
 }
 	
 
 void Camera::updateImage() {
-	//cout << "Update Image";
-
 	frameResult = getImage();
-
-	//frameResult = findTarget(frameResult);
-
+	frameResult = findTarget(frameResult);
 	frameResult = findRobot(frameResult);
 
 	frontP = calcRectMiddle(front);
 	backP = calcRectMiddle(back);
 	middleP = calcRobotMiddle(frontP, backP);
-	//cout << middleP;
 }
 
 
@@ -62,8 +55,6 @@ Mat Camera::findRobot(Mat frameR) {
 			}
 		}
 	}
-
-	//imshow("Pink", imgThresholded);
 
 	Rect max;
 	for (int i = 0; i < buf.size(); i++) {
@@ -91,8 +82,6 @@ Mat Camera::findRobot(Mat frameR) {
 		}
 	}
 
-	//imshow("Blue", imgThresholded2);
-
 	for (int i = 0; i < buf.size(); i++) {
 		if (buf[i].height * buf[i].width > max.height * max.width) {
 			max = buf[i];
@@ -103,7 +92,6 @@ Mat Camera::findRobot(Mat frameR) {
 
 	buf.clear();
 
-	int min = 40;
 	//find the target
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
 	cv::inRange(imgHSV, Scalar(45, 115, 170), Scalar(60, 255, 255), imgThresholded3);
@@ -120,9 +108,6 @@ Mat Camera::findRobot(Mat frameR) {
 		}
 	}
 
-	imshow("Target", imgThresholded3);
-
-	Rect max;
 	for (int i = 0; i < buf.size(); i++) {
 		if (buf[i].height * buf[i].width > max.height * max.width) {
 			max = buf[i];
@@ -156,8 +141,6 @@ Mat Camera::findTarget(Mat frameR) {
 			}
 		}
 	}
-
-	imshow("Target", imgThresholded3);
 
 	Rect max;
 	for (int i = 0; i < buf.size(); i++) {

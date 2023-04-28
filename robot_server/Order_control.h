@@ -9,5 +9,5 @@ private:
 public:
     void addOrder(Order ord);
     bool ordersExists();
-    void deleteOrder(Order curr);
+    void deleteOrder();
 };
