@@ -5,10 +5,10 @@ services:
     command: "python -m bot"
     env_file:
       - tg_bot/bot/.env
-    restart: always
+    restart: on-failure
 
   robot:
-    build: Version20.03.2023
+    build: robot_server
     image: robot
     devices:
       - /dev/video0
@@ -16,5 +16,5 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-      - ./Version20.03.2023/:/home/sergh/
+      - ./robot_server/:/home/sergh/
     tty: true

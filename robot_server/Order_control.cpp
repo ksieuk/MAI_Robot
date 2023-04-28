@@ -8,7 +8,7 @@ void Order_control::addOrder(Order ord){
     orderList.push_back(ord);
 }
 
-void Order_control::deleteOrder(Order curr){
+void Order_control::deleteOrder(){
     orderList.erase(orderList.begin());
 }
 
