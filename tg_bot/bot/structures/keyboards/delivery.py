@@ -1,6 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup
 
 from bot.structures.keyboards.base_buttons import create_kb_basic
+from bot.config import drinks, locations
 
 
 def get_kb_new_order() -> ReplyKeyboardMarkup:
@@ -8,27 +9,11 @@ def get_kb_new_order() -> ReplyKeyboardMarkup:
 
 
 def get_kb_drinks() -> ReplyKeyboardMarkup:
-    drinks = [
-        'Кофе',
-        'Чай',
-        'Кола',
-        'Сок',
-        'Вода',
-        'Молоко',
-        'Лимонад',
-        'Коктейль',
-    ]
-    return create_kb_basic(*drinks)
+    return create_kb_basic(*drinks.get_state_names())
 
 
 def get_kb_locations() -> ReplyKeyboardMarkup:
-    locations = [
-        'Около кулера',
-        'Около входа',
-        'Около принтера',
-        'Около камеры',
-    ]
-    return create_kb_basic(*locations)
+    return create_kb_basic(*locations.get_state_names())
 
 
 def get_kb_confirmation() -> ReplyKeyboardMarkup:

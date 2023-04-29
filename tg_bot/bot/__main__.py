@@ -1,17 +1,16 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from bot.handlers import start
+from bot.handlers import commands, delivery
 from bot.config import bot_settings
 
 
-
 async def main():
-
     bot = Bot(token=bot_settings.bot_token.get_secret_value())
     dp = Dispatcher()
 
     dp.include_routers(
-        start.router,
+        commands.router,
+        delivery.router,
     )
 
     # Альтернативный вариант регистрации роутеров по одному на строку
