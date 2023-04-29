@@ -1,4 +1,5 @@
 from pydantic import BaseSettings, SecretStr
+from bot.structures.states import JsonFileStorage, States
 
 
 class Settings(BaseSettings):
@@ -10,3 +11,6 @@ class Settings(BaseSettings):
 
 
 bot_settings = Settings()
+drinks = States(JsonFileStorage('drinks.json'))
+locations = States(JsonFileStorage('locations.json'))
+states_objs = {'drink': drinks, 'location': locations}
