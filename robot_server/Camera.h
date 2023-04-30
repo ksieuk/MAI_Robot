@@ -25,11 +25,29 @@ private:
 	Point middleP;
 	Point targetP;
 
+	struct customColor{
+		int a;
+		int b;
+		int c;
+		customColor(int _a, int _b, int _c){
+			a = _a;
+			b = _b;
+			c = _c;
+		}
+	};
+
+	customColor FrontBotColor = customColor(0, 0, 0);
+	customColor RearBotColor  = customColor(0, 0, 0);
+	customColor TargetColor  = customColor(0, 0, 0);
+	customColor HomeColor  = customColor(0, 0, 0);
+
 	Mat getImage();
 	Mat findRobot(Mat frameR);
 	Mat findTarget(Mat frameR);
+
 	Point calcRectMiddle(Rect rect);
 	Point calcRobotMiddle(Point a, Point b);
+
 	int calcAngleToTarget(Point robotFront, Point robotMiddle, Point target);
 	int calcDistanceToTarget(Point a, Point b);
 public:
@@ -37,5 +55,9 @@ public:
 	void updateImage();
 	int getDistanceToTarget();
 	int getAngle();
+	void setColorBotFront(int a, int b, int c);
+	void setColorBotRear(int a, int b, int c);
+	void setColorTarget(int a, int b, int c);
+	void setColorHome(int a, int b, int c);
 	~Camera();
 };

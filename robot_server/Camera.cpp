@@ -42,7 +42,7 @@ Mat Camera::findRobot(Mat frameR) {
 
 	//fint the front of robot
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(imgHSV, Scalar(150, 120, 120), Scalar(172, 255, 255), imgThresholded);
+	cv::inRange(imgHSV, Scalar(FrontBotColor.a-6, FrontBotColor.b-25, FrontBotColor.c-35), Scalar(FrontBotColor.a+6, FrontBotColor.b+25, FrontBotColor.c+35), imgThresholded);
 	for (int y = 0; y < imgThresholded.rows; y++) {
 		for (int x = 0; x < imgThresholded.cols; x++) {
 			int value = imgThresholded.at<uchar>(y, x);
@@ -62,13 +62,13 @@ Mat Camera::findRobot(Mat frameR) {
 			max = buf[i];
 		}
 	}
-	rectangle(frameR, max, Scalar(255, 0, 255, 4));
+	rectangle(frameR, max, Scalar(255, 0, 0));
 	front = max;
 
 	buf.clear();
 
 	//find the back of robot
-	cv::inRange(imgHSV, Scalar(68, 120, 120), Scalar(122, 255, 255), imgThresholded2);
+	cv::inRange(imgHSV, Scalar(RearBotColor.a-6, RearBotColor.b-25, RearBotColor.c-35), Scalar(RearBotColor.a+6, RearBotColor.b+25, RearBotColor.c+35), imgThresholded2);
 	for (int y = 0; y < imgThresholded2.rows; y++) {
 		for (int x = 0; x < imgThresholded2.cols; x++) {
 			int value = imgThresholded2.at<uchar>(y, x);
@@ -87,34 +87,8 @@ Mat Camera::findRobot(Mat frameR) {
 			max = buf[i];
 		}
 	}
-	rectangle(frameR, max, Scalar(125, 0, 200, 4));
+	rectangle(frameR, max, Scalar(0, 255, 0));
 	back = max;
-
-	buf.clear();
-
-	//find the target
-	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(imgHSV, Scalar(45, 115, 170), Scalar(60, 255, 255), imgThresholded3);
-	for (int y = 0; y < imgThresholded3.rows; y++) {
-		for (int x = 0; x < imgThresholded3.cols; x++) {
-			int value = imgThresholded3.at<uchar>(y, x);
-			if (value == 255) {
-				Rect rect;
-				int count = floodFill(imgThresholded3, Point(x, y), Scalar(200), &rect);
-				if (rect.width >= min && rect.height >= min) {
-					buf.push_back(rect);
-				}
-			}
-		}
-	}
-
-	for (int i = 0; i < buf.size(); i++) {
-		if (buf[i].height * buf[i].width > max.height * max.width) {
-			max = buf[i];
-		}
-	}
-	rectangle(frameR, max, Scalar(125, 0, 200, 4));
-	targetP = calcRectMiddle(max);
 
 	buf.clear();
 
@@ -128,7 +102,7 @@ Mat Camera::findTarget(Mat frameR) {
 	int min = 40;
 	//find the target
 	cv::cvtColor(frameR, imgHSV, COLOR_BGR2HSV);
-	cv::inRange(imgHSV, Scalar(45, 115, 170), Scalar(60, 255, 255), imgThresholded3);
+	cv::inRange(imgHSV, Scalar(TargetColor.a-6, TargetColor.b-25, TargetColor.c-35), Scalar(TargetColor.a+6, TargetColor.b+25, TargetColor.c+35), imgThresholded3);
 	for (int y = 0; y < imgThresholded3.rows; y++) {
 		for (int x = 0; x < imgThresholded3.cols; x++) {
 			int value = imgThresholded3.at<uchar>(y, x);
@@ -148,7 +122,7 @@ Mat Camera::findTarget(Mat frameR) {
 			max = buf[i];
 		}
 	}
-	rectangle(frameR, max, Scalar(125, 0, 200, 4));
+	rectangle(frameR, max, Scalar(0, 0, 255));
 	targetP = calcRectMiddle(max);
 	return frameR;
 }
@@ -198,4 +172,20 @@ int Camera::getAngle(){
 	int angle;
 	angle = calcAngleToTarget(frontP, middleP, targetP);
 	return angle;
+}
+
+void Camera::setColorBotFront(int a, int b, int c){
+	FrontBotColor = customColor(a, b, c);
+}
+	
+void Camera::setColorBotRear(int a, int b, int c){
+	RearBotColor = customColor(a, b, c);
+}
+
+void Camera::setColorTarget(int a, int b, int c){
+	TargetColor = customColor(a, b, c);
+}
+
+void Camera::setColorHome(int a, int b, int c){
+	HomeColor = customColor(a, b, c);
 }
