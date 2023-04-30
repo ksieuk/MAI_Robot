@@ -4,8 +4,9 @@ import asyncio_mqtt as aiomqtt
 from aiogram import Router
 from aiogram.filters.state import StateFilter
 from aiogram.filters.text import Text
-from aiogram.fsm.context import FSMContext
+from aiogram.filters.command import Command
 from aiogram.types import Message
+from aiogram.fsm.context import FSMContext
 
 from bot.structures.fsm_groups import DeliveryStates
 from bot.config import drinks, locations, mqtt_settings
@@ -13,7 +14,24 @@ from bot.structures.keyboards.delivery import (
     get_kb_new_order, get_kb_drinks, get_kb_locations, get_kb_confirmation,
 )
 
+# router_delivery = Router()
 router = Router()
+# router_delivery.include_router(router)
+
+
+@router.message(
+    Text(text=['Отменить', 'Прекратить выполнение заказа'], ignore_case=True),
+    StateFilter('*')
+)
+@router.message(
+    Command('cancel'), StateFilter('*')
+)
+async def cmd_cancel_delivery(message: Message, state: FSMContext):
+    await state.clear()
+    await message.answer(
+        text='Выполнение заказа прекращено',
+        reply_markup=get_kb_new_order(),
+    )
 
 
 @router.message(Text(text='Сделать заказ', ignore_case=True), StateFilter(None))
@@ -64,10 +82,15 @@ async def cmd_get_location(message: Message, state: FSMContext):
             text='Эта метка сейчас недоступна, выбери другую',
         )
 
+    await message.answer(
+        text='Отправляю ваш заказ',
+        reply_markup=get_kb_confirmation()
+    )
+
     await mqtt_new_order()
 
     await message.answer(
-        text='Принято! Ваш заказ в процессе.',
+        text='Принято! Ваш заказ в процессе',
         reply_markup=get_kb_confirmation()
     )
     await state.set_state(DeliveryStates.confirmation)

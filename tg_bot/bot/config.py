@@ -16,7 +16,7 @@ class BotSettings(BaseSettings):
 
 class MqttSettings(BaseSettings):
     host = Field('', env='MQQT_HOST')
-    topic = Field('delivery', env='MQQT_HOST')
+    topic = Field('delivery', env='MQQT_TOPIC')
 
 
 drinks = States(JsonFileStorage('drinks.json'))
@@ -25,5 +25,6 @@ states_objs = {'drink': drinks, 'location': locations}
 
 bot_settings = BotSettings()
 mqtt_settings = MqttSettings()
+print(mqtt_settings.dict())
 
 ADMINS_IDS = set(os.environ.get('ADMINS_IDS').split(','))
