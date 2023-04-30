@@ -1,24 +1,17 @@
 import asyncio
-import time
+import asyncio_mqtt as aiomqtt
 
-import paho.mqtt.client as mqtt
-
-from aiogram import Router, F
-from aiogram.filters.command import Command, CommandStart
+from aiogram import Router
 from aiogram.filters.state import StateFilter
 from aiogram.filters.text import Text
 from aiogram.fsm.context import FSMContext
-from aiogram.types import (
-    Message, KeyboardButton,
-    ReplyKeyboardMarkup, ReplyKeyboardRemove,
-    InlineKeyboardMarkup, InlineKeyboardButton,
-)
+from aiogram.types import Message
 
 from bot.structures.fsm_groups import DeliveryStates
+from bot.config import drinks, locations, mqtt_settings
 from bot.structures.keyboards.delivery import (
     get_kb_new_order, get_kb_drinks, get_kb_locations, get_kb_confirmation,
 )
-from bot.config import drinks, locations
 
 router = Router()
 
@@ -70,6 +63,9 @@ async def cmd_get_location(message: Message, state: FSMContext):
         return await message.answer(
             text='Эта метка сейчас недоступна, выбери другую',
         )
+
+    await mqtt_new_order()
+
     await message.answer(
         text='Принято! Ваш заказ в процессе.',
         reply_markup=get_kb_confirmation()
@@ -77,8 +73,14 @@ async def cmd_get_location(message: Message, state: FSMContext):
     await state.set_state(DeliveryStates.confirmation)
 
 
+async def mqtt_new_order():
+    async with aiomqtt.Client(mqtt_settings.host) as client:
+        await client.publish(mqtt_settings.topic, payload='smth')
+
+
 @router.message(Text(text='Заказ доставлен', ignore_case=True), StateFilter(DeliveryStates.confirmation))
 async def cmd_confirmed(message: Message, state: FSMContext):
+    await mqtt_get_is_delivered()
     await message.answer(
         text='Спасибо, что выбрали нашу доставку!',
         reply_markup=get_kb_new_order()
@@ -86,8 +88,22 @@ async def cmd_confirmed(message: Message, state: FSMContext):
     await state.clear()
 
 
+async def mqtt_get_is_delivered():
+    reconnect_interval = 5  # In seconds
+    while True:
+        try:
+            async with aiomqtt.Client(mqtt_settings.host) as client:
+                async with client.messages() as messages:
+                    await client.subscribe(topic=mqtt_settings.topic)
+                    async for message in messages:
+                        return message.payload.decode()
+        except aiomqtt.MqttError as error:
+            print(f'Error "{error}". Reconnecting in {reconnect_interval} seconds.')
+            await asyncio.sleep(reconnect_interval)
+
+
 @router.message(Text(text='Робот не приехал', ignore_case=True), StateFilter(DeliveryStates.confirmation))
-async def cmd_confirmed(message: Message, state: FSMContext):
+async def cmd_confirmed(message: Message):
     await message.answer(
         text='Подождите еще немного!',
     )
