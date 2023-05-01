@@ -11,7 +11,7 @@
 using namespace std;
 using namespace cv;
 
-#define mqtt_host "broker.hivemq.com"
+#define mqtt_host "192.168.1.4"
 #define mqtt_port 1883
 
 int main() {
