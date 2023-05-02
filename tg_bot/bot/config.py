@@ -27,4 +27,4 @@ bot_settings = BotSettings()
 mqtt_settings = MqttSettings()
 print(mqtt_settings.dict())
 
-ADMINS_IDS = set(os.environ.get('ADMINS_IDS').split(','))
+ADMINS_IDS = set(map(int, os.environ.get('ADMINS_IDS').split(',')))
