@@ -16,7 +16,6 @@ void Robot_control::start() {
 		this->cam->update_image();
         this->cam->draw_image();
 		piloting();
-		std::cout << "piloting completed";
 		if (cv::waitKey(33) == 27) break;
 	}
 }
@@ -40,12 +39,12 @@ void Robot_control::piloting() {
 			this->status = 3;
 		}
 
-		if (cam->has_delta_distance_to_home(200)){
+		if (cam->has_delta_distance_to_home(20)){
 			robot->moveForward();
 			std::cout << "MoveForward";
 		}
 		else {
-			this->status = 4;
+			this->status = 1;
 		}
 
 	case 2:
