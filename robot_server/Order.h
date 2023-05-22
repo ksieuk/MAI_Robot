@@ -9,5 +9,5 @@ private:
 	int status;
 	*/
 public:
-	//Order(int _color, int _customerID);
+	Order();
 };
