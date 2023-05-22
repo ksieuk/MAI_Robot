@@ -5,6 +5,6 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(Mosquitto REQUIRED IMPORTED_TARGET libmosquitto)
 
 include_directories( ${OpenCV_INCLUDE_DIRS} )
-set(SOURCES main.cpp Camera.cpp Robot.cpp Robot_control.cpp User.cpp Order_control.cpp)
+set(SOURCES main.cpp Camera.cpp Robot.cpp Robot_control.cpp Order_control.cpp Order.cpp)
 add_executable( main ${SOURCES})
 target_link_libraries( main ${OpenCV_LIBS} PkgConfig::Mosquitto)

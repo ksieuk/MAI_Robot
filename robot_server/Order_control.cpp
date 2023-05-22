@@ -1,4 +1,5 @@
 #include "Order_control.h"
+#include "Order.h"
 #include <iostream>
 #include <vector>
 
@@ -10,6 +11,7 @@ void Order_control::addOrder(Order ord){
 
 void Order_control::deleteOrder(){
     orderList.erase(orderList.begin());
+    //currentOrder = orderList.begin();
 }
 
 bool Order_control::ordersExists(){

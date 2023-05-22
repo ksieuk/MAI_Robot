@@ -1,8 +1,13 @@
 #pragma once
 
-class Order {
+class Order{
 private:
-	int puf;
-	int numOrder;
+/*
+	int orderID;
+	int color;
+	int customerID;
 	int status;
+	*/
+public:
+	//Order(int _color, int _customerID);
 };
