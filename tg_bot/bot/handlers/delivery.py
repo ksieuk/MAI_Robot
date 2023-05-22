@@ -98,12 +98,12 @@ async def cmd_get_location(message: Message, state: FSMContext):
 
 async def mqtt_new_order():
     async with aiomqtt.Client(mqtt_settings.host) as client:
-        await client.publish(mqtt_settings.topic, payload='smth')
+        await client.publish(mqtt_settings.topic, payload='NEW ORDER')
 
 
 @router.message(Text(text='Заказ доставлен', ignore_case=True), StateFilter(DeliveryStates.confirmation))
 async def cmd_confirmed(message: Message, state: FSMContext):
-    await mqtt_get_is_delivered()
+    # await mqtt_get_is_delivered()
     await message.answer(
         text='Спасибо, что выбрали нашу доставку!',
         reply_markup=get_kb_new_order()
