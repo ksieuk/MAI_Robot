@@ -4,7 +4,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 
-Robot_control::Robot_control(Camera* cam, Robot* bot, Order_control* ord_control) {
+Robot_control::Robot_control(Detector* cam, Robot* bot, Order_control* ord_control) {
 	this->status = 0;
 	this->robot = bot;
 	this->cam = cam;
@@ -13,14 +13,15 @@ Robot_control::Robot_control(Camera* cam, Robot* bot, Order_control* ord_control
 
 void Robot_control::start() {
 	for (;;) {
-		this->cam->updateImage();
+		this->cam->update_image();
+        this->cam->draw_image();
 		piloting();
+		std::cout << "piloting completed";
 		if (cv::waitKey(33) == 27) break;
 	}
 }
 
 void Robot_control::piloting() {
-	robot->moveForward();
 	switch (this->status) {
 	case 0:
 		//Robot is waiting
@@ -32,20 +33,20 @@ void Robot_control::piloting() {
 		}
 	case 1:
 		//Robot is moving
-		if (cam->getAngle() > 0){
+		if (cam->get_angle_to_home() > 0){
 			this->status = 2;
 		}
 		else {
 			this->status = 3;
 		}
 
-		if (cam->getDistanceToTarget() > 200){
+		if (cam->has_delta_distance_to_home(200)){
 			robot->moveForward();
+			std::cout << "MoveForward";
 		}
 		else {
 			this->status = 4;
 		}
-		this->status = 0;
 
 	case 2:
 		//Robot is turnig left
@@ -59,7 +60,8 @@ void Robot_control::piloting() {
 
 	case 4:
 		//Delete the order
-		ord_control->deleteOrder();
+		//ord_control->deleteOrder();
+		this->status = 1;
 		break;
 	}
 }

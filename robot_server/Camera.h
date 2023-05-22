@@ -1,63 +1,84 @@
 #pragma once
-#include<opencv2/core/mat.hpp>
-#include "opencv2/opencv.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/opencv.hpp>
+
 
 using namespace cv;
 
-class Camera {
-private:
-	Mat frame;
-	Mat frameResult;
-	Mat imgThresholded;
-	Mat imgHSV;
-	Mat imgThresholded2;
-	Mat imgThresholded3;
+struct color_hsv{
+    int h;
+    int s;
+    int v;
+    color_hsv(int _h, int _s, int _v): h(_h), s(_s), v(_v) {}
+};
 
-	VideoCapture cap;
+class Detector{
+    Mat frame;
+    Mat frame_res;
+    VideoCapture cap;
 
-	Rect front;
-	Rect back;
-	Rect target;
+    color_hsv color_bot_front = color_hsv(0, 0 ,0);
+    color_hsv color_bot_rear = color_hsv(0, 0, 0);
+    color_hsv color_target = color_hsv(0, 0 ,0);
+    color_hsv color_home = color_hsv(0, 0 ,0);
 
-	Point frontP;
-	Point backP;
-	Point middleP;
-	Point targetP;
+    Rect rect_bot_front;
+    Rect rect_bot_rear;
+    Rect rect_target;
+    Rect rect_home;
 
-	struct customColor{
-		int a;
-		int b;
-		int c;
-		customColor(int _a, int _b, int _c){
-			a = _a;
-			b = _b;
-			c = _c;
-		}
-	};
+    Point point_centre_bot;
 
-	customColor FrontBotColor = customColor(0, 0, 0);
-	customColor RearBotColor  = customColor(0, 0, 0);
-	customColor TargetColor  = customColor(0, 0, 0);
-	customColor HomeColor  = customColor(0, 0, 0);
+    int angle_bot;
+    int angle_target;
+    int distance_target;
+    int angle_home;
+    int distance_home;
 
-	Mat getImage();
-	Mat findRobot(Mat frameR);
-	Mat findTarget(Mat frameR);
+    static Point find_rect_centre(Rect r);
+    static Point find_centre_beetwen_point(Point p1, Point p2);
+    static int calc_angle_beetwen_point(Point p1, Point p2);
+    static int calc_distance_beetwen_point(Point p_a, Point p_b);
 
-	Point calcRectMiddle(Rect rect);
-	Point calcRobotMiddle(Point a, Point b);
+    void update_angle_bot();
+    void update_angle_to_target();
+    void update_distance_to_target();
+    void update_angle_to_home();
+    void update_distance_to_home();
 
-	int calcAngleToTarget(Point robotFront, Point robotMiddle, Point target);
-	int calcDistanceToTarget(Point a, Point b);
-public:
-    Camera(int i);
-	void updateImage();
-	int getDistanceToTarget();
-	int getAngle();
-	void setColorBotFront(int a, int b, int c);
-	void setColorBotRear(int a, int b, int c);
-	void setColorTarget(int a, int b, int c);
-	void setColorHome(int a, int b, int c);
-	~Camera();
+    Rect detect_rect(color_hsv color);
+
+    public:
+
+    Detector(int id);
+    Detector(Detector &d);
+    Detector& operator=(Detector &d);
+
+    void set_color_bot_front(int h, int s, int v);
+    void set_color_bot_rear(int h, int s, int v);
+    void set_color_target(int h, int s, int v);
+    void set_color_home(int h, int s, int v);
+
+    Mat get_image();
+    void update_image();
+    void draw_image();
+
+    int get_angle_bot();
+    int get_angle_to_target();
+    int get_distance_to_target();
+    int get_angle_to_home();
+    int get_distance_to_home();
+
+    bool has_delta_angle_to_target(int delta);
+    bool has_delta_distance_to_target(int delta);
+    bool has_delta_angle_to_home(int delta);
+    bool has_delta_distance_to_home(int delta);
+
+
+    void draw_rect_bot_front(int frame_r, int frame_g, int frame_b);
+    void draw_rect_bot_rear(int frame_r, int frame_g, int frame_b);
+    void draw_rect_target(int frame_r, int frame_g, int frame_b);
+    void draw_rect_home(int frame_r, int frame_g, int frame_b);
+
+
+    ~Detector();
 };

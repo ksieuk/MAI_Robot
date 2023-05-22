@@ -8,11 +8,11 @@
 class Robot_control {
 private:
 	Robot *robot;
-	Camera *cam;
+	Detector *cam;
 	Order_control *ord_control;
 	int status;
 public:
-	Robot_control(Camera* cam, Robot* bot, Order_control* ord_control);
+	Robot_control(Detector* cam, Robot* bot, Order_control* ord_control);
 	void start();
 	void piloting();
 };
