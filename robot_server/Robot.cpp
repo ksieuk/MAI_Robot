@@ -9,7 +9,7 @@
 #define NUM_MESSAGES 30
 #define THREAD 10
 #define KEEP_ALIVE 60
-#define MQTT_PUB_TOPIC "testSergh"
+#define MQTT_PUB_TOPIC "abot/command/Alex"
 #define MQTT_QOS_LEVEL 2
 #define MSG_MAX_SIZE 512
 

@@ -12,7 +12,7 @@ using namespace std;
 
 #define input_topic "/robot_mai/order_control"
 
-bool Order_control::order_exist = false;
+bool Order_control::order_exist = true;
 
 void Order_control::connect_callback(struct mosquitto *mosq, void *obj, int result) {
     printf("connect callback(order_manager mqtt), rc=%d\n", result);
