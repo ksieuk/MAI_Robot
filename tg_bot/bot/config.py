@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from pydantic import BaseSettings, SecretStr, Field
 from bot.structures.states import JsonFileStorage, States
+from pathlib import Path
 
 
 load_dotenv()
@@ -19,8 +20,9 @@ class MqttSettings(BaseSettings):
     topic = Field('delivery', env='MQQT_TOPIC')
 
 
-drinks = States(JsonFileStorage('drinks.json'))
-locations = States(JsonFileStorage('locations.json'))
+BASE_DIR = Path(__file__).resolve().parent
+drinks = States(JsonFileStorage(str(BASE_DIR / 'static/drinks.json')))
+locations = States(JsonFileStorage(str(BASE_DIR / 'static/locations.json')))
 states_objs = {'drink': drinks, 'location': locations}
 
 bot_settings = BotSettings()

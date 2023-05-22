@@ -1,13 +1,18 @@
 version: '3.7'
 services:
   bot:
+    container_name: bot
+    hostname: bot
     build: tg_bot
-    command: "python -m bot"
     env_file:
       - tg_bot/bot/.env
     restart: on-failure
+    volumes:
+      - /tg_bot/bot/static:/app/bot/static
 
   robot:
+    container_name: robot
+    hostname: robot
     build: robot_server
     image: robot
     devices:
@@ -18,3 +23,5 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./robot_server/:/home/sergh/
     tty: true
+    depends_on:
+      - bot

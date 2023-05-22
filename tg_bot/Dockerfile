@@ -4,8 +4,11 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
-RUN pip install --upgrade setuptools
-RUN pip install -r requirements.txt
-RUN chmod 755 .
+RUN  mkdir -p /app/bot/static/ \
+     && pip install --upgrade pip --no-cache-dir \
+     && pip install -r requirements.txt
 
 COPY . .
+
+
+CMD ["python", "-m", "bot"]
