@@ -7,7 +7,7 @@ Delivery robot development
 
 `docker-compose up --build`
 
-`docker exec -it mai_robot_robot_1 /bin/bash`
+`docker exec -it robot /bin/bash`
 
 `home/sergh/build/main`
 
